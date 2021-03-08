@@ -51,43 +51,46 @@ public class BeerServiceTest {
     private BeerService beerService;
 
     @Test
-    void whenBeerInformedThenItShouldBeCreated() throws BeerAlreadyRegisteredException {
+    void  whenBeerInformedThenItShuldBecreated() throws BeerAlreadyRegisteredException {
         // given
-        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-        Beer expectedSavedBeer = beerMapper.toModel(expectedBeerDTO);
+        BeerDTO expectedbeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer expectedSaveBeer = beerMapper.toModel(expectedbeerDTO);
 
         // when
-        when(beerRepository.findByName(expectedBeerDTO.getName())).thenReturn(Optional.empty());
-        when(beerRepository.save(expectedSavedBeer)).thenReturn(expectedSavedBeer);
+        when(beerRepository.findByName(expectedbeerDTO.getName())).thenReturn(Optional.empty());
+        when(beerRepository.save(expectedSaveBeer)).thenReturn(expectedSaveBeer);
 
         //then
-        BeerDTO createdBeerDTO = beerService.createBeer(expectedBeerDTO);
+        BeerDTO createdBeerDTO = beerService.createBeer(expectedbeerDTO);
 
-        assertThat(createdBeerDTO.getId(), is(equalTo(expectedBeerDTO.getId())));
-        assertThat(createdBeerDTO.getName(), is(equalTo(expectedBeerDTO.getName())));
-        assertThat(createdBeerDTO.getQuantity(), is(equalTo(expectedBeerDTO.getQuantity())));
+        assertThat(createdBeerDTO.getId(), is(equalTo(expectedbeerDTO.getId())));
+        assertThat(createdBeerDTO.getName(), is(equalTo(expectedbeerDTO.getName())));
+        assertThat(createdBeerDTO.getQuantity(), is(equalTo(expectedbeerDTO.getQuantity())));
+
+        assertThat(createdBeerDTO.getQuantity(), is(greaterThan(2)));
+
     }
 
     @Test
-    void whenAlreadyRegisteredBeerInformedThenAnExceptionShouldBeThrown() {
-        // given
-        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-        Beer duplicatedBeer = beerMapper.toModel(expectedBeerDTO);
+    void whenAlreadyRegisteredBeerInformadThenAnExceptionShouldBeThrown() {
+        //given
+        BeerDTO expectedbeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer duplicatedBeer = beerMapper.toModel(expectedbeerDTO);
 
-        // when
-        when(beerRepository.findByName(expectedBeerDTO.getName())).thenReturn(Optional.of(duplicatedBeer));
+        //when
+        when(beerRepository.findByName(expectedbeerDTO.getName())).thenReturn(Optional.of(duplicatedBeer));
 
-        // then
-        assertThrows(BeerAlreadyRegisteredException.class, () -> beerService.createBeer(expectedBeerDTO));
+        //then
+        assertThrows(BeerAlreadyRegisteredException.class, () -> beerService.createBeer(expectedbeerDTO));
     }
 
     @Test
-    void whenValidBeerNameIsGivenThenReturnABeer() throws BeerNotFoundException {
+    void whenValidBeerNameIsGivenTehnReturnABeer() throws BeerNotFoundException {
         // given
         BeerDTO expectedFoundBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         Beer expectedFoundBeer = beerMapper.toModel(expectedFoundBeerDTO);
 
-        // when
+        //when
         when(beerRepository.findByName(expectedFoundBeer.getName())).thenReturn(Optional.of(expectedFoundBeer));
 
         // then
@@ -95,6 +98,7 @@ public class BeerServiceTest {
 
         assertThat(foundBeerDTO, is(equalTo(expectedFoundBeerDTO)));
     }
+
 
     @Test
     void whenNotRegisteredBeerNameIsGivenThenThrowAnException() {
@@ -108,6 +112,8 @@ public class BeerServiceTest {
         assertThrows(BeerNotFoundException.class, () -> beerService.findByName(expectedFoundBeerDTO.getName()));
     }
 
+
+/*
     @Test
     void whenListBeerIsCalledThenReturnAListOfBeers() {
         // given
@@ -202,6 +208,8 @@ public class BeerServiceTest {
 
         assertThrows(BeerNotFoundException.class, () -> beerService.increment(INVALID_BEER_ID, quantityToIncrement));
     }
+
+ */
 //
 //    @Test
 //    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
